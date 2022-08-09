@@ -9,7 +9,7 @@ project.
 
  
 
-### Contribution \#1: Valhalla  Meili integration for GPX processing
+### Contribution \#1: Valhalla Meili integration for GPX processing
 
  
 

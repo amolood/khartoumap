@@ -85,7 +85,7 @@ print(f'Stats for GPX File: {args.gpx}\n')
 print(f'Total distance = {round(data.distance.max()/1000,2)} km')
 print(f'Total time = {round((data.iloc[-1].time - data.time[0]).seconds/60,2)} minutes')
 print(f'Elevation change = {round(data.elevation.max()-data.elevation.min(),2)} m')
-print(f'Average speed = {round(data.speed.mean()*1.61,2)} km/hr')
+print(f'Average speed = {round(data.speed.mean()*3.6,2)} km/hr')
 print(f'Track map saved in script directory as: {args.gpx[:-4]}_plot.html')
 if args.output:
 	data.to_csv(f'{args.gpx[:-4]}.csv', index= False)
@@ -107,7 +107,7 @@ if args.valhalla:
 	
 	#Sending a request to Valhalla's Meili
 	#url = "http://localhost:8002/trace_route" ### local host needs to be set up
-	url = "https://valhalla1.openstreetmap.de/trace_route"
+	url = "https://valhalla1.openstreetmap.de/trace_route" ### use Valhalla public server in the interim
 	headers = {'Content-type': 'application/json'}
 	data = str(meili_request_body)
 	try:
@@ -118,37 +118,37 @@ if args.valhalla:
 	#Receiving Valhalla's Meili response
 	if r.status_code == 200:    
 		response_text = json.loads(r.text)
-		resp = str(response_text['tracepoints'])
-		resp = resp.replace("'waypoint_index': None", "'waypoint_index': '#'")
-		resp = resp.replace("None", "{'matchings_index': '#', 'name': '', 'waypoint_index': '#', 'alternatives_count': 0, 'distance': 0, 'location': [0.0, 0.0]}")
-		resp = resp.replace("'", '"')
-		resp = json.dumps(resp)
-		resp = json.loads(resp)
+		response = str(response_text['tracepoints'])
+		response = response.replace("'waypoint_index': None", "'waypoint_index': '#'")
+		response = response.replace("None", "{'matchings_index': '#', 'name': '', 'waypoint_index': '#', 'alternatives_count': 0, 'distance': 0, 'location': [0.0, 0.0]}")
+		response = response.replace("'", '"')
+		response = json.dumps(response)
+		response = json.loads(response)
         
 		#Create a dataframe for response contents
-		df_response = pd.read_json(resp)
-		df_response = df_response[['name', 'distance', 'location']]
-		df_trip_matched = pd.merge(meili, df_response, left_index=True, right_index=True)
+		response_df = pd.read_json(response)
+		response_df = response_df[['name', 'distance', 'location']]
+		map_matched_df = pd.merge(meili, response_df, left_index=True, right_index=True)
 	   
-	   #Break down location into longitude and latitude for matched coordinates
-		for i, row in df_trip_matched.iterrows():
-			df_trip_matched.at[i, 'longitude'] = df_trip_matched.at[i,'location'][0]
-			df_trip_matched.at[i, 'latitude'] = df_trip_matched.at[i,'location'][1]
+		#Break down location into longitude and latitude for matched coordinates
+		for i, row in map_matched_df.iterrows():
+			map_matched_df.at[i, 'longitude'] = map_matched_df.at[i,'location'][0]
+			map_matched_df.at[i, 'latitude'] = map_matched_df.at[i,'location'][1]
         
 			#Formatting: saving Meili output + original cooridinates for unmatched points
-			if df_trip_matched.at[i, 'longitude'] == 0.0:
-				df_trip_matched.at[i, 'longitude'] = df_trip_matched.at[i,'lon']
-				df_trip_matched.at[i, 'latitude'] = df_trip_matched.at[i,'lat']
+			if map_matched_df.at[i, 'longitude'] == 0.0:
+				map_matched_df.at[i, 'longitude'] = map_matched_df.at[i,'lon']
+				map_matched_df.at[i, 'latitude'] = map_matched_df.at[i,'lat']
 			
-		df_trip_matched = df_trip_matched.drop(['location', 'lon', 'lat'], 1)
-		df_trip_matched.rename(columns={'longitude': 'lon', 'latitude':'lat'}, inplace= True)
-		df_trip_matched['distance']= df_trip_matched.distance.cumsum() #*0.3048
+		map_matched_df = map_matched_df.drop(['location', 'lon', 'lat'], 1)
+		map_matched_df.rename(columns={'longitude': 'lon', 'latitude':'lat'}, inplace= True)
+		map_matched_df['distance']= map_matched_df.distance.cumsum() #*0.3048
 	
-		data= df_trip_matched
+		data= map_matched_df
 		the_map= folium_plot(data)
 		the_map.save(f'{args.gpx[:-4]}_valhalla_plot.html')
 		print(f'Map Matching Successful! See: {args.gpx[:-4]}_valhalla_plot.html')
 		if args.output:
-			df_trip_matched.to_csv(f'{args.gpx[:-4]}.csv', index= False)
+			map_matched_df.to_csv(f'{args.gpx[:-4]}.csv', index= False)
 			print(f'Track data saved in gpx directory as: {args.gpx[:-4]}.csv')
 		print('\n#####################################################################\n')
