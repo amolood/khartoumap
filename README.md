@@ -1,8 +1,12 @@
-KhartouMap
-==========
+The KhartouMap Initiative
+=========================
+
+ 
 
 Mapping the public transit of the Greater Khartoum area.
 --------------------------------------------------------
+
+ 
 
 This repository will contain all data and source code related to the KhartouMap
 project.
@@ -13,7 +17,7 @@ project.
 
  
 
-#### Notes on acquisition steps:
+#### Notes on processing steps:
 
 -   To be updated.
 
