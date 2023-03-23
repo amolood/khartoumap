@@ -1,5 +1,5 @@
 valhalla/
-gpx/
+gpx_files/
 Survey/
-GTFS/
+GTFS_files/
 make_gtfs/
