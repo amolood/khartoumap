@@ -1,0 +1,2 @@
+stop_code,stop_lat,stop_lon,stop_id,parent_station,stop_desc,stop_name,location_type,,
+1,15.59833,32.51691,stop_0001,,,Alarabi,1,,see: https://developers.google.com/transit/gtfs/reference/#stopstxt
