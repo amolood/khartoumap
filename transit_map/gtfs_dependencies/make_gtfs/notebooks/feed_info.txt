@@ -1,0 +1,2 @@
+feed_publisher_name,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version,feed_contact_email,feed_id
+KhartouMap,https://www.linkedin.com/company/khartoumap/,EN,20230901,20240831,"Beta",awadt@mit.edu,krt-beta-sd
