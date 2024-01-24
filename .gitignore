@@ -2,3 +2,4 @@ valhalla/
 gpx_files/
 Survey/
 GTFS_files/
+__pycache__/

@@ -1,6 +1,0 @@
-service_window_id,start_time,end_time,monday,tuesday,wednesday,thursday,friday,saturday,sunday
-weekday_peak_1,5:00:00,9:00:00,1,1,1,1,1,0,0
-weekday_peak_2,15:00:00,18:00:00,1,1,1,1,1,0,0
-weekday_offpeak_1,9:00:00,15:00:00,1,1,1,1,1,0,0
-weekday_offpeak_2,15:00:00,23:59:00,1,1,1,1,1,0,0
-weekend,5:00:00,23:59:00,0,0,0,0,0,1,1
