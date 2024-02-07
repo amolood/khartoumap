@@ -1,0 +1,22 @@
+version: '3.0'
+services:
+  valhalla:
+    image: ghcr.io/gis-ops/docker-valhalla/valhalla:latest #docker image
+    ports:
+      - "8002:8002" #localhost port
+    volumes:
+      - ./custom_files/:/custom_files
+    environment:
+      # get tile data for the region of interest
+      - tile_urls=https://download.geofabrik.de/africa/sudan-latest.osm.pbf
+      # Get correct bounding box from e.g. https://boundingbox.klokantech.com/
+      - min_x=31 # bounding box around Greater Khartoum
+      - min_y=15
+      - max_x=35
+      - max_y=17
+      - use_tiles_ignore_pbf=True
+      - force_rebuild=False
+      - force_rebuild_elevation=False
+      - build_elevation=True
+      - build_admins=True
+      - build_time_zones=True
