@@ -1,0 +1,2 @@
+feed_publisher_name,feed_id,feed_publisher_url,feed_lang,feed_start_date,feed_end_date,feed_version,default_lang,feed_contact_email,feed_contact_url
+KhartouMap,,https://www.linkedin.com/company/khartoumap/,EN,20230901,20260831,Beta_v2,,awadt@mit.edu,

@@ -4,3 +4,5 @@ Survey/
 GTFS_files/
 __pycache__/
 custom_files/
+.ipynb_checkpoints/
+gtfs_dependencies/
