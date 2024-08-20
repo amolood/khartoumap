@@ -5,7 +5,7 @@ We are a social enterprise catalyzing the modernization of Sudan's public transi
 
 <center>
     <img src="./data/transit_map/krt.png" alt="Khartoum" width="65%">
-<center>
+</center>
 
 Introduction
 ------------
