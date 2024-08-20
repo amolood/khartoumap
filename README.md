@@ -3,9 +3,7 @@ The KhartouMap Initiative
 
 We are a social enterprise catalyzing the modernization of Sudan's public transit through mapping, open data, education, and innovation. This repository contains all data and source code related to our work. Read our executive report <a href="https://simplebooklet.com/khartoumap" target="_blank">here</a>.
 
-<div style="display: flex; justify-content: center;">
-    <img src="./data/transit_map/krt.png" alt="Khartoum" width="65%">
-</div>
+<img src="./images/khartoum-map.png" alt="Khartoum Map" style="display: block; margin-left: auto; margin-right: auto; width: 50%;">
 
 Introduction
 ------------
