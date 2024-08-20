@@ -3,9 +3,9 @@ The KhartouMap Initiative
 
 We are a social enterprise catalyzing the modernization of Sudan's public transit through mapping, open data, education, and innovation. This repository contains all data and source code related to our work. Read our executive report <a href="https://simplebooklet.com/khartoumap" target="_blank">here</a>.
 
-<div style="text-align: center;">
-    <img src="./data/transit_map/krt.png" alt="Khartoum" width="75%">
-</div>
+<center>
+    <img src="./data/transit_map/krt.png" alt="Khartoum" width="65%">
+<center>
 
 Introduction
 ------------
@@ -46,7 +46,7 @@ Transit troubles affected almost everyone in the city. Over 85% of the populatio
 
 Now imagine trying to fix the vast transit system in Khartoum without knowing for sure where buses were going and coming from, or how riders were really using the system. This is what was happening for years prior to KhartouMap, and still happens in many other rapidly growing cities.
 
-![](./data/gpx/gpx.png)
+![](./data/gpx/gpx_tracking.png)
 
 ---
 
