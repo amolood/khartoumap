@@ -6,3 +6,4 @@ __pycache__/
 custom_files/
 .ipynb_checkpoints/
 gtfs_dependencies/
+.DS_Store
