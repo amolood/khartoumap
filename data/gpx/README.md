@@ -1,8 +1,9 @@
 The KhartouMap Initiative
 =========================
 
-![](gpx.png)
-
+<div style="text-align: center;">
+    <img src="gpx.png" alt="GPX tracking" width="75%">
+</div>
 
 Script 1: Valhalla Meili Integration for GPX Processing
 -------------------------------------------------------

@@ -1,10 +1,11 @@
 The KhartouMap Initiative
 =========================
 
-We are a social enterprise catalyzing the modernization of Sudan's public transit through mapping, open data, education, and innovation. This repository contains all data and source code related to our work. Read our executive report [here](https://simplebooklet.com/khartoumap).
+We are a social enterprise catalyzing the modernization of Sudan's public transit through mapping, open data, education, and innovation. This repository contains all data and source code related to our work. Read our executive report <a href="https://simplebooklet.com/khartoumap" target="_blank">here</a>.
 
-
-<img src="./data/transit_map/krt.png" alt="Khartoum" width="50%">
+<div style="text-align: center;">
+    <img src="./data/transit_map/krt.png" alt="Khartoum" width="75%">
+</div>
 
 Introduction
 ------------
@@ -59,7 +60,7 @@ Those who had the means and were able to, evacuated. Team members continued to w
 
 Over the next several months, with a dataset of 8,000+ responses to the transit survey and successful mapping of 300+ transit routes crisscrossing the city, the team painted a vivid picture of Khartoum’s neighborhoods and transportation access before April 2023.
 
-![](.data/transit_map/paper_map.png)
+![](./data/transit_map/paper_map.png)
 ---
 
 ## KhartouMap Transit Map Key Takeaways

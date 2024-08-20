@@ -1,4 +1,6 @@
 The KhartouMap Initiative
 =========================
 
-<img src="beta_gtfs.png" alt="Beta GTFS" width="65%">
+<div style="text-align: center;">
+    <img src="beta_gtfs.png" alt="Beta GTFS" width="75%">
+</div>
