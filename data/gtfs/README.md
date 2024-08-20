@@ -1,8 +1,4 @@
 The KhartouMap Initiative
 =========================
 
-Mapping the public transit of the Greater Khartoum area.
-
- 
-
-Placeholder...
+![](beta_gtfs.png)

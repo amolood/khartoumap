@@ -1,6 +1,7 @@
 The KhartouMap Initiative
 =========================
- 
+
+![](gpx.png)
 
 
 Script 1: Valhalla Meili Integration for GPX Processing
