@@ -7,10 +7,10 @@ We are a social enterprise catalyzing the modernization of Sudan's public transi
     <img src="./data/transit_map/krt.png" alt="Khartoum" width="65%">
 </p>
 
-Introduction
+
 ------------
 
-# New Transit Mapping Paints a Lively Picture of Khartoum Before the War
+# Our Transit Mapping Paints a Lively Picture of Khartoum Before the War
 
 Two months before conflict in Sudan broke out, our young enterprising KhartouMap team had spent months on the ground collecting transit data and mapping the semi-formal public transportation network of Khartoum.
 
@@ -22,7 +22,7 @@ So what began as a project for progress has become our closest baseline for norm
 
 ---
 
-## A Window in Time Through Transit
+## A Window in Time Through Public Transit
 
 Sudan – and its capital city, Khartoum – was a country in motion. Bustling streets, lively markets, congested traffic, and scores of public transit riders were common sights.
 
@@ -50,7 +50,7 @@ Now imagine trying to fix the vast transit system in Khartoum without knowing fo
 
 ---
 
-## Completing Transit Work Remotely
+## Completing Our Work Remotely
 
 After the conflict began, the team was forced to stop all on-the-ground activities immediately as fighting raged on with no end in sight.
 
