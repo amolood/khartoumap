@@ -97,10 +97,10 @@ Multi-criteria analysis identified **Regional Express Railway** as optimal solut
 
 ## 🚧 Implementation Context
 
-**Prerequisites**: End of current conflict and political stability
-**Deployment Strategy**: Phased approach allowing gradual modal shift
-**Maintenance**: Primary facility at Khartoum Central + new southern terminus facility
-**Intermodal Integration**: Coordination with existing minibus networks
+- **Prerequisites**: End of current conflict and political stability
+- **Deployment Strategy**: Phased approach allowing gradual modal shift
+- **Maintenance**: Primary facility at Khartoum Central + new southern terminus facility
+- **Intermodal Integration**: Coordination with existing minibus networks
 
 ---
 
