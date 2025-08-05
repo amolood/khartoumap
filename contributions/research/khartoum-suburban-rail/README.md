@@ -1,6 +1,5 @@
-# 🚂 Khartoum Suburban Rail Service
-
 <p align="center">
+    <h1>🚂 Khartoum Suburban Rail</h1>
     <img src="ker.png" alt="Cover Page" width="80%">
 </p>
 
