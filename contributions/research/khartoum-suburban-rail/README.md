@@ -1,4 +1,4 @@
-# 🚂 KER – Khartoum Express Railways
+# 🚂 Khartoum Suburban Rail Service
 
 <p align="center">
     <img src="ker.png" alt="Cover Page" width="80%">
@@ -6,7 +6,7 @@
 
 - Study completed by: Laurent SOURIS, Ihssane ARHAZZAL, Myriam ESSAFI, Christian MAPETO MUA-NAMBELO, Olivier BEYA BOUE
 - Institution: Ecole Nationale des Ponts et Chaussées
-- Note: This repo hosts the project's executive summary and summary slides. The full *84 page* report including multi-criteria, financial, socio-demographic, and risk analyses can be made available upon request.
+- Note: This repo hosts the project's executive summary and summary slides. The full **84 page report** including multi-criteria, financial, socio-demographic, and risk analyses can be made available upon request.
 
 A comprehensive pre-feasibility Study study for creating a suburban rail service in Khartoum, Sudan. This project proposes rehabilitating the existing railway line to provide frequent, reliable public transport connecting the city center with growing suburban areas – addressing critical mobility needs in Africa's expanding capitals.
 
@@ -25,7 +25,7 @@ A comprehensive pre-feasibility Study study for creating a suburban rail service
 
 ## 🎯 Project Rationale
 
-### Current Challenges (Pre-war)
+### Challenges (Pre-war)
 - **Population Growth**: Expanding suburban areas within 20km radius
 - **Traffic Congestion**: Unorganized minibus system and private vehicles
 - **Existing Infrastructure**: Derelict railway line with 3 underutilized stations
