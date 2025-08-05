@@ -17,6 +17,6 @@ Contributions are welcomed through pull requests! *When possible*, please create
 
 ### 🚂 [research/khartoum-suburban-rail](./research/khartoum-suburban-rail/) (July 8, 2024)
 **Khartoum Suburban Rail Pre-Feasibility Study**
-- Comprehensive 84-page engineering study by École des Ponts et Chaussées students
+- Comprehensive study by École des Ponts et Chaussées students
 - Proposes 39km hybrid rail line with 11 stations connecting suburban areas
 - *Includes executive summary, presentation slides, and detailed implementation roadmap*
