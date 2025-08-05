@@ -1,5 +1,7 @@
+<h1 align="center">🚂 Khartoum Suburban Rail </h1>
+
+
 <p align="center">
-    <h1>🚂 Khartoum Suburban Rail</h1>
     <img src="ker.png" alt="Cover Page" width="80%">
 </p>
 
