@@ -14,6 +14,7 @@ Contributions are welcomed through pull requests! *When possible*, please create
 **Interactive Bus Route Visualization**
 - Google Maps-powered web application with Arabic RTL support
 - *Ready-to-use HTML file requiring only a Google Maps API key*
+- Reimplemented on OpenStreetMap and Leaflet [Khaldosh249/route-map](./Khaldosh249/route-map/) 
 
 ### 🚂 [research/khartoum-suburban-rail](./research/khartoum-suburban-rail/) (July 8, 2024)
 **Khartoum Suburban Rail Pre-Feasibility Study**

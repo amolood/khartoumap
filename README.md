@@ -92,3 +92,27 @@ Some key insights emerged about transit accessibility across pre-war Khartoum an
 For now, this data stands as a testament to a moment in time rather than a roadmap for next steps. Khartoum and all of Sudan have an immense challenge ahead of surviving and rebuilding from the conflict.
 
 However, a hopeful sliver remains: a nation that once built itself can rebuild itself again. Efforts like KhartouMap, led by young people focused on the future, offer a possible path forward when the time comes to rebuild.
+
+---
+
+## 🚀 Getting Started
+### Repository Structure
+
+This repository is organized into several key directories containing our data, analysis, and documentation:
+
+📊 **[`data`](./data)** - Complete transit mapping dataset including GPX tracks, survey responses, geospatial analysis files, and processing scipts
+
+📖 **[`notebooks`](./notebooks)** - Jupyter notebooks for mapping, processing GPX tracks, and analyzing mobility survey
+
+🤝 **[`contributions`](./contributions)** - Tools, code, reports, etc. from contributors using KhartouMap data
+
+---
+
+## ✍️ Suggested Citation
+Abdelhalim, Awad and Ali, Ilham and Ziedan, Abubakr, KhartouMap: Mapping the Semi-formal Public Transit System of Khartoum (October 07, 2023). Available at SSRN: https://ssrn.com/abstract=5382811 or http://dx.doi.org/10.2139/ssrn.5382811
+
+---
+
+## 📜 License
+
+MIT License © 2025

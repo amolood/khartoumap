@@ -1,6 +1,6 @@
 # 📊 KhartouMap Initiative Data Repository 🇸🇩
 
-Welcome to the comprehensive data collection for the Greater Khartoum area's transportation network! This repository contains geospatial datasets, transit information, and mobility research data collected through field surveys, GPS tracking, and on-ground mapping efforts.
+Welcome to the comprehensive data collection for the Greater Khartoum area's transportation network. This repository contains geospatial datasets, transit information, and mobility research data collected through field surveys, GPS tracking, and on-ground mapping efforts.
 
 ## 🎯 Dataset Overview
 
@@ -60,6 +60,15 @@ Our data collection spans multiple transportation modes and urban features, prov
 3. **Review Processing Scripts**: Python tools available in `/gpx/` for data processing and validation
 4. **Coordinate Systems**: Geographic data uses standard WGS84 (EPSG:4326) unless otherwise specified
 
+*For questions about specific datasets or data processing, please refer to individual subfolder documentation or open an issue.*
+
 ---
 
-*For questions about specific datasets or data processing, please refer to individual subfolder documentation or open an issue.*
+## ✍️ Suggested Citation
+Abdelhalim, Awad and Ali, Ilham and Ziedan, Abubakr, KhartouMap: Mapping the Semi-formal Public Transit System of Khartoum (October 07, 2023). Available at SSRN: https://ssrn.com/abstract=5382811 or http://dx.doi.org/10.2139/ssrn.5382811
+
+---
+
+## 📜 License
+
+MIT License © 2025
