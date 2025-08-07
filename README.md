@@ -1,8 +1,6 @@
 
 <h1 align="center">🚌 The KhartouMap Initiative 🚌 </h1>
 
-===
-
 We are a social enterprise catalyzing the modernization of Sudan's public transit through mapping, open data, education, and innovation. This repository contains all data and code related to our work. Read our executive report <a href="https://simplebooklet.com/khartoumap" target="_blank">here</a> or [download the report](./Report.pdf).
 
 <p align="center">
