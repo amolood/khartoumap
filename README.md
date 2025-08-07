@@ -1,14 +1,13 @@
-The KhartouMap Initiative
-=========================
 
-We are a social enterprise catalyzing the modernization of Sudan's public transit through mapping, open data, education, and innovation. This repository contains all data and code related to our work. Read our executive report <a href="https://simplebooklet.com/khartoumap" target="_blank">here</a>.
+<h1 align="center">🚌 The KhartouMap Initiative 🚌 </h1>
+
+===
+
+We are a social enterprise catalyzing the modernization of Sudan's public transit through mapping, open data, education, and innovation. This repository contains all data and code related to our work. Read our executive report <a href="https://simplebooklet.com/khartoumap" target="_blank">here</a> or [download the report](./Report.pdf).
 
 <p align="center">
     <img src="./data/transit-map/krt.png" alt="Khartoum" width="65%">
 </p>
-
-
-------------
 
 # Our Transit Mapping Paints a Lively Picture of Khartoum Before the War
 
@@ -34,7 +33,7 @@ KhartouMap’s efforts culminated in the largest transit and mobility study of K
 
 The KhartouMap project was motivated by the many transit woes facing residents: long lines, rising prices for rider passes, safety on public transport, and the availability of buses.
 
----
+
 
 ## Why Map the Transit System?
 
@@ -48,7 +47,7 @@ Now imagine trying to fix the vast transit system in Khartoum without knowing fo
 
 ![](./data/gpx/gpx_tracking.png)
 
----
+
 
 ## Completing Our Work Remotely
 
@@ -60,7 +59,8 @@ Those who had the means and were able to, evacuated. Team members continued to w
 
 Over the next several months, with a dataset of 8,000+ responses to the transit survey and successful mapping of 300+ transit routes crisscrossing the city, the team painted a vivid picture of Khartoum’s neighborhoods and transportation access before April 2023.
 
-![](./data/transit_map/paper_map.png)
+![](./data/transit-map/paper_map.png)
+
 ---
 
 ## KhartouMap Transit Map Key Takeaways
@@ -71,21 +71,21 @@ Some key insights emerged about transit accessibility across pre-war Khartoum an
 - **Khartoum** locality is 100% served by public transit within a 30-minute walk from any neighborhood, followed by Jebel Awlia (90%) and Karari (73%).
 -  **Bahri** (34%), **Umdurman, and Umbada** (31%) are the localities with largest percentage of areas considered transit deserts.
 
----
+
 
 ### Services & Amenities
 
 - **Khartoum** locality has the shortest distances to services and amenities that are accessible by public transit, including hospitals, banks, schools, and marketplaces.
 - **The typical** travel time on public transit to services and amenities (without traffic) is 8 minutes in Khartoum, 12 minutes in Umdurman, 20 minutes in Bahri, and 43 minutes in Sharg Al Nile.
 
----
+
 
 ### Ridership
 
 - **The majority** of all transit trips are directed towards **Khartoum** in the morning (70% of transit rides), followed by Umdurman (12%) and Bahri (11%).
 - **The average** commute on a single public transit ride is 35 minutes, and the typical distance traveled is 24 km.
 
----
+
 
 ## Looking Ahead
 
