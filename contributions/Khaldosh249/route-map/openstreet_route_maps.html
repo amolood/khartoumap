@@ -3,491 +3,443 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KhartouMap - خطوط الحافلات</title>
-    <!-- Tailwind CSS for modern styling -->
+    <title>The KhartouMap Initiative</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Leaflet CSS and JS for OpenStreetMap -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    
-    <!-- Proj4.js for coordinate system conversion (UTM to Lat/Long) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.8.0/proj4.js"></script>
-    
+
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
+            font-family: 'Cairo', sans-serif;
+            background-color: #0f172a; /* Slate 900 */
+            color: #e2e8f0;
+            overflow: hidden; /* For full app feel */
         }
-        #map-container {
-            width: 100%;
-            height: 70vh;
-            border-radius: 1rem;
-            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-        
-        /* Leaflet popup custom styling */
+        ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+
+        /* Map Controls Customization */
         .leaflet-popup-content-wrapper {
-            background-color: #f9fafb;
-            color: #000000;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            background-color: #1e293b;
+            color: #f1f5f9;
+            border: 1px solid #334155;
+            border-radius: 0.5rem;
         }
-        
-        .leaflet-popup-content {
-            margin: 0;
-            padding: 12px;
-            min-width: 200px;
-            font-family: 'Inter', sans-serif;
-        }
-        
         .leaflet-popup-tip {
-            background-color: #f9fafb;
+            background-color: #1e293b;
         }
-        
-        /* Custom marker styles */
-        .bus-stop-marker {
-            background-color: #FF0000;
-            border: 2px solid #FFFFFF;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        .leaflet-container a {
+            color: #fbbf24;
         }
-        
-        /* Responsive styles for dropdown and button */
-        @media (max-width: 639px) {
-            #route-select {
-                width: 100%;
-            }
-            
-            #map-container {
-                height: 60vh;
-            }
-            
-            .leaflet-popup-content {
-                min-width: 150px;
-                font-size: 12px;
-            }
-        }
-        
-        /* RTL support for Leaflet controls */
-        .leaflet-control-container .leaflet-top.leaflet-right {
-            right: auto;
-            left: 10px;
-        }
-        
-        .leaflet-control-container .leaflet-top.leaflet-left {
-            left: auto;
-            right: 10px;
-        }
-        
-        /* Loading animation */
+
+        /* Loading Spinner */
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        
         .loading-spinner {
             animation: spin 1s linear infinite;
         }
+
+        /* Glass Effect for Overlays */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .route-item.active {
+            background-color: rgba(251, 191, 36, 0.1);
+            border-right: 3px solid #fbbf24;
+            color: #fbbf24;
+        }
     </style>
 </head>
-<body class="p-4 sm:p-8">
-<div class="container mx-auto">
-    <header class="text-center mb-8">
-        <h1 class="text-2xl sm:text-4xl font-extrabold text-white leading-tight mb-2">
-            KhartouMap - خطوط حافلات الخرطوم
-        </h1>
-        <p class="text-md text-gray-400 max-w-2xl mx-auto">
-            تعرض هذه الخريطة خطوط الحافلات في الخرطوم. اختر مسارًا من القائمة لتسليط الضوء عليه.
-        </p>
-    </header>
+<body class="flex h-screen w-full">
 
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-        <select id="route-select" class="bg-gray-800 text-white p-2 rounded-md shadow-inner focus:outline-none focus:ring-2 focus:ring-yellow-500 transition-colors duration-300">
-            <option value="">اختر مسارًا...</option>
-        </select>
-        <button id="recenter-btn" class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-6 rounded-full shadow-lg transition-colors duration-300">
-            إعادة توسيط الخريطة
-        </button>
-    </div>
+<aside id="sidebar" class="fixed inset-y-0 right-0 z-50 w-80 bg-slate-900 border-l border-slate-800 transform transition-transform duration-300 translate-x-full md:translate-x-0 md:relative flex flex-col shadow-2xl">
 
-    <div id="map-container">
-        <div id="loading-indicator" class="flex items-center justify-center h-full bg-gray-800 text-gray-400">
-            <div class="text-center">
-                <div class="loading-spinner rounded-full h-12 w-12 border-b-2 border-yellow-500 mx-auto mb-4"></div>
-                <p>جاري تحميل الخريطة...</p>
-            </div>
+    <div class="p-6 border-b border-slate-800 bg-slate-900 z-10">
+        <div class="flex justify-between items-center mb-2">
+            <h1 class="text-2xl font-black text-white flex items-center gap-2">
+                <i class="fa-solid fa-map-location-dot text-yellow-500"></i>KhartouMap
+            </h1>
+            <button id="close-sidebar" class="md:hidden text-gray-400 hover:text-white">
+                <i class="fa-solid fa-times text-xl"></i>
+            </button>
+        </div>
+        <p class="text-xs text-slate-400">The KhartouMap Initiative</p>
+
+        <div class="mt-6 relative">
+            <input type="text" id="route-search" placeholder="ابحث عن خط سير (مثلاً: الثورة...)"
+                   class="w-full bg-slate-800 text-white text-sm rounded-lg pl-4 pr-10 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 border border-slate-700 transition-all">
+            <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-500"></i>
         </div>
     </div>
 
-    <div class="bg-gray-800 p-4 rounded-lg shadow-md mt-4 text-sm flex flex-wrap justify-center gap-4">
-        <span class="flex items-center">
-            <svg width="20" height="4">
-                <line x1="0" y1="2" x2="20" y2="2" style="stroke:#6b7280;stroke-width:4" />
-            </svg>
-            <span class="ml-2 text-gray-400">جميع المسارات</span>
-        </span>
-        <span class="flex items-center">
-            <svg width="20" height="4">
-                <line x1="0" y1="2" x2="20" y2="2" style="stroke:#FFD700;stroke-width:4" />
-            </svg>
-            <span class="ml-2 text-yellow-500">المسار المختار</span>
-        </span>
-        <span class="flex items-center">
-            <svg width="20" height="20">
-                <circle cx="10" cy="10" r="4" fill="#ff0000" />
-            </svg>
-            <span class="ml-2 text-red-400">نقاط التوقف</span>
-        </span>
+    <div class="flex-1 overflow-y-auto p-4 space-y-2" id="routes-list-container">
+        <div class="text-center text-slate-500 mt-10 text-sm">جاري تحميل المسارات...</div>
     </div>
-</div>
+
+    <div id="route-stats" class="hidden p-4 bg-slate-800/50 border-t border-slate-700 text-xs text-slate-300">
+        <div class="flex justify-between items-center mb-1">
+            <span>المسار المحدد:</span>
+            <span id="stat-name" class="font-bold text-yellow-500">-</span>
+        </div>
+        <div class="flex justify-between items-center">
+            <span>عدد المحطات:</span>
+            <span id="stat-stops" class="font-bold text-white">-</span>
+        </div>
+    </div>
+</aside>
+
+<main class="flex-1 relative h-full w-full">
+
+    <button id="open-sidebar" class="absolute top-4 right-4 z-[400] md:hidden bg-slate-900 text-yellow-500 p-3 rounded-lg shadow-lg border border-slate-700">
+        <i class="fa-solid fa-bars text-xl"></i>
+    </button>
+
+    <div id="map-container" class="h-full w-full z-0 bg-slate-900"></div>
+
+    <div id="loading-indicator" class="absolute inset-0 z-[500] flex items-center justify-center bg-slate-900/90 backdrop-blur-sm">
+        <div class="text-center">
+            <div class="loading-spinner rounded-full h-16 w-16 border-t-4 border-b-4 border-yellow-500 mx-auto mb-6 shadow-glow"></div>
+            <h2 class="text-xl font-bold text-white mb-2">جاري تحميل الخريطة</h2>
+            <p class="text-slate-400 text-sm">يرجى الانتظار بينما نقوم بجلب البيانات...</p>
+        </div>
+    </div>
+
+    <div class="absolute bottom-6 left-6 z-[400] flex flex-col gap-3">
+        <button id="recenter-btn" class="glass-panel text-white hover:text-yellow-500 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105" title="عرض الكل">
+            <i class="fa-solid fa-compress-arrows-alt"></i>
+        </button>
+
+        <button id="locate-btn" class="bg-yellow-500 text-slate-900 hover:bg-yellow-400 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-all hover:scale-105" title="موقعي الحالي">
+            <i class="fa-solid fa-location-crosshairs text-lg"></i>
+        </button>
+    </div>
+
+    <div class="absolute top-4 left-4 z-[400] glass-panel p-3 rounded-lg shadow-xl text-xs sm:text-sm">
+        <div class="flex items-center gap-2 mb-1">
+            <span class="w-3 h-3 rounded-full bg-slate-500 inline-block"></span>
+            <span class="text-slate-300">مسار عادي</span>
+        </div>
+        <div class="flex items-center gap-2 mb-1">
+            <span class="w-3 h-3 rounded-full bg-yellow-500 inline-block shadow-[0_0_10px_rgba(234,179,8,0.5)]"></span>
+            <span class="text-yellow-500 font-bold">المسار المختار</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full border border-white bg-red-600 inline-block"></span>
+            <span class="text-white">محطة توقف</span>
+        </div>
+    </div>
+
+</main>
 
 <script>
-    console.log('Script started loading...');
-
-    // The JSON data for bus routes - will be loaded from external file
+    // --- State & Variables ---
     let routesJSON = null;
-
-    // The JSON data for bus stops - will be loaded from external file  
     let busStopsJSON = null;
-
     let map;
-    let allRoutes = [];
-    let selectedMarkers = [];
     let routeLayers = new L.LayerGroup();
     let markerLayer = new L.LayerGroup();
+    let userLocationMarker = null;
 
-    // Define the UTM to Lat/Lng projection using proj4
+    // Proj4 Definition
     proj4.defs("EPSG:32636", "+proj=utm +zone=36 +ellps=WGS84 +datum=WGS84 +units=m +no_defs");
 
-    // Function to load JSON data
+    // --- Core Functions ---
+
+    // 1. Load Data
     async function loadJSONData() {
         try {
-            console.log('Loading bus routes data...');
-            const routesResponse = await fetch('bus_routes.json');
-            if (!routesResponse.ok) {
-                throw new Error(`Failed to load bus routes: ${routesResponse.status}`);
-            }
-            routesJSON = await routesResponse.json();
-            console.log('Bus routes loaded successfully');
+            const [routesRes, stopsRes] = await Promise.all([
+                fetch('bus_routes.json'),
+                fetch('bus_stops.json')
+            ]);
 
-            console.log('Loading bus stops data...');
-            const stopsResponse = await fetch('bus_stops.json');
-            if (!stopsResponse.ok) {
-                throw new Error(`Failed to load bus stops: ${stopsResponse.status}`);
-            }
-            busStopsJSON = await stopsResponse.json();
-            console.log('Bus stops loaded successfully');
+            if (!routesRes.ok || !stopsRes.ok) throw new Error('Failed to fetch data');
 
-            // Remove duplicate bus stops by stop name (keep first occurrence)
+            routesJSON = await routesRes.json();
+            const stopsRaw = await stopsRes.json();
+
+            // Deduplicate Stops
             const uniqueStopsMap = new Map();
-            const uniqueStops = [];
-            const originalCount = busStopsJSON.Sheet1.length;
-            
-            busStopsJSON.Sheet1.forEach(stop => {
-                if (!uniqueStopsMap.has(stop.stop_name)) {
-                    uniqueStopsMap.set(stop.stop_name, true);
-                    uniqueStops.push(stop);
-                }
+            stopsRaw.Sheet1.forEach(stop => {
+                if (!uniqueStopsMap.has(stop.stop_name)) uniqueStopsMap.set(stop.stop_name, stop);
             });
-            
-            // Replace the original array with deduplicated stops
-            busStopsJSON.Sheet1 = uniqueStops;
-            
-            console.log(`Original stops: ${originalCount}, Unique stops: ${uniqueStops.length}, Removed duplicates: ${originalCount - uniqueStops.length}`);
+            busStopsJSON = { Sheet1: Array.from(uniqueStopsMap.values()) };
 
             return true;
         } catch (error) {
-            console.error('Error loading JSON data:', error);
-            showError('فشل في تحميل البيانات', `تعذر تحميل بيانات المسارات: ${error.message}`);
+            console.error(error);
+            showError('تعذر الاتصال بالخادم', 'تأكد من وجود ملفات البيانات (bus_routes.json, bus_stops.json)');
             return false;
         }
     }
 
-    // Function to convert UTM coordinates to Lat/Long
+    // 2. Utils: Coordinate Conversion
     function utmToLatLng(x, y) {
-        // A simple check to determine if coordinates are UTM or not
         if (x > 400000) {
             const p = proj4("EPSG:32636", "EPSG:4326", [x, y]);
-            return [p[1], p[0]]; // Leaflet uses [lat, lng] format
+            return [p[1], p[0]];
         } else {
-            // The bus stops data has inconsistent coordinates. We use a heuristic conversion here.
             const stop_proj = proj4("EPSG:32636", "EPSG:4326", [440000, parseFloat(y)]);
-            return [stop_proj[1], parseFloat(x)]; // Leaflet uses [lat, lng] format
+            return [stop_proj[1], parseFloat(x)];
         }
     }
 
-    // Function to calculate distance between two lat/lng points in meters
-    function getDistanceBetweenPoints(point1, point2) {
-        const R = 6371000; // Earth's radius in meters
-        const dLat = (point2[0] - point1[0]) * Math.PI / 180;
-        const dLng = (point2[1] - point1[1]) * Math.PI / 180;
+    // 3. Utils: Distance Calculation
+    function getDistance(p1, p2) {
+        const R = 6371000;
+        const dLat = (p2[0] - p1[0]) * Math.PI / 180;
+        const dLng = (p2[1] - p1[1]) * Math.PI / 180;
         const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-            Math.cos(point1[0] * Math.PI / 180) * Math.cos(point2[0] * Math.PI / 180) *
+            Math.cos(p1[0] * Math.PI / 180) * Math.cos(p2[0] * Math.PI / 180) *
             Math.sin(dLng/2) * Math.sin(dLng/2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return R * c; // Distance in meters
+        return R * c;
     }
 
-    // Helper function to create custom bus stop marker
-    function createBusStopMarker(position, title) {
-        const customIcon = L.divIcon({
-            className: 'bus-stop-marker',
-            iconSize: [20, 20],
-            iconAnchor: [10, 10],
-            popupAnchor: [0, -10]
-        });
-        
-        return L.marker(position, {
-            icon: customIcon,
-            title: title
-        });
-    }
-
-    // Function to show error message
-    function showError(title, message) {
-        document.getElementById('map-container').innerHTML =
-            `<div class="flex items-center justify-center h-full bg-gray-800 text-red-400 text-center p-4 rounded-lg">
-                <div>
-                    <h3 class="text-xl font-bold mb-2">${title}</h3>
-                    <p>${message}</p>
-                    <button onclick="location.reload()" class="mt-4 bg-yellow-500 text-black px-4 py-2 rounded">إعادة تحميل</button>
-                </div>
-            </div>`;
-    }
-
-    // Initialize map function
+    // 4. Map Initialization
     async function initMap() {
-        console.log('InitMap function called');
-        try {
-            // Load JSON data first
-            const dataLoaded = await loadJSONData();
-            if (!dataLoaded) {
-                return;
-            }
+        const loaded = await loadJSONData();
+        if (!loaded) return;
 
-            console.log('Setting up map configuration...');
-            // Set the default map center
-            const mapCenter = [15.5007, 32.5596]; // Approximate center of Khartoum
+        // Dark Theme Map (CartoDB Dark Matter)
+        map = L.map('map-container', { zoomControl: false }).setView([15.55, 32.53], 12);
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 20
+        }).addTo(map);
 
-            console.log('Creating Leaflet map instance...');
-            map = L.map('map-container', {
-                center: mapCenter,
-                zoom: 12,
-                zoomControl: true,
-                attributionControl: true
-            });
+        L.control.zoom({ position: 'topleft' }).addTo(map);
 
-            // Add OpenStreetMap tile layer
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                maxZoom: 19
-            }).addTo(map);
+        routeLayers.addTo(map);
+        markerLayer.addTo(map);
 
-            // Add layer groups to map
-            routeLayers.addTo(map);
-            markerLayer.addTo(map);
+        drawAllRoutes(); // Draw grey lines
+        renderRouteList(); // Draw sidebar list
 
-            console.log('Drawing routes...');
-            // Process all routes and draw them initially
-            drawAllRoutes();
-
-            console.log('Populating route selector...');
-            // Populate the dropdown menu
-            populateRouteSelect();
-
-            console.log('Adding event listeners...');
-            // Add event listeners after the map has been initialized
-            const selectElement = document.getElementById('route-select');
-            selectElement.addEventListener('change', handleRouteSelection);
-
-            const recenterBtn = document.getElementById('recenter-btn');
-            recenterBtn.addEventListener('click', recenterMap);
-
-            console.log('Map initialization complete - hiding loading indicator');
-            // Hide loading indicator only after everything is successfully initialized
-            const loadingIndicator = document.getElementById('loading-indicator');
-            if (loadingIndicator) {
-                loadingIndicator.style.display = 'none';
-            }
-
-        } catch (error) {
-            console.error('Error initializing map:', error);
-            showError('خطأ في تحميل الخريطة', `فشل في تهيئة الخريطة: ${error.message}`);
-        }
+        document.getElementById('loading-indicator').style.display = 'none';
     }
 
+    // 5. Drawing & Rendering
     function drawAllRoutes() {
-        // Clear previous routes
         routeLayers.clearLayers();
-        allRoutes = [];
-
-        // Draw each route as a non-highlighted polyline
         const uniqueRoutes = [...new Set(routesJSON.features.map(f => f.attributes.Name))];
+
         uniqueRoutes.forEach(name => {
             const features = routesJSON.features.filter(f => f.attributes.Name === name);
             features.forEach(feature => {
-                const path = feature.geometry.paths[0].map(point => utmToLatLng(point[0], point[1]));
-                const polyline = L.polyline(path, {
-                    color: '#6b7280',
-                    weight: 2,
-                    opacity: 0.6
-                });
-                routeLayers.addLayer(polyline);
-                allRoutes.push(polyline);
+                const path = feature.geometry.paths[0].map(p => utmToLatLng(p[0], p[1]));
+                L.polyline(path, { color: '#475569', weight: 2, opacity: 0.4, className: 'route-line' }).addTo(routeLayers);
             });
         });
     }
 
-    function clearMapHighlights() {
-        // Reset all polylines to neutral color
-        allRoutes.forEach(p => {
-            p.setStyle({ color: '#6b7280', weight: 2 });
+    function renderRouteList(filterText = '') {
+        const container = document.getElementById('routes-list-container');
+        container.innerHTML = '';
+
+        const uniqueRoutes = [...new Set(routesJSON.features.map(f => f.attributes.Name))].sort();
+
+        const filtered = uniqueRoutes.filter(r => r.includes(filterText));
+
+        if (filtered.length === 0) {
+            container.innerHTML = `<div class="text-center text-slate-500 py-4">لا توجد نتائج</div>`;
+            return;
+        }
+
+        filtered.forEach(name => {
+            const div = document.createElement('div');
+            div.className = 'route-item p-3 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors border-b border-slate-800/50 flex justify-between items-center group';
+            div.innerHTML = `
+                <span class="text-sm font-medium text-slate-300 group-hover:text-white transition-colors">${name}</span>
+                <i class="fa-solid fa-chevron-left text-xs text-slate-600 group-hover:text-yellow-500"></i>
+            `;
+            div.onclick = () => selectRoute(name, div);
+            container.appendChild(div);
         });
-        // Clear all markers
+    }
+
+    // 6. Interaction Logic
+    function selectRoute(name, element) {
+        // Update UI
+        document.querySelectorAll('.route-item').forEach(el => el.classList.remove('active'));
+        if(element) element.classList.add('active');
+
+        // Mobile: close sidebar on select
+        if(window.innerWidth < 768) {
+            document.getElementById('sidebar').classList.add('translate-x-full');
+        }
+
+        // Clear Map Highlights
+        routeLayers.clearLayers();
         markerLayer.clearLayers();
-        selectedMarkers = [];
-    }
 
-    function populateRouteSelect() {
-        const routeNames = new Set();
-        routesJSON.features.forEach(feature => {
-            routeNames.add(feature.attributes.Name);
-        });
+        // Redraw background routes (dimmed)
+        drawAllRoutes();
 
-        const sortedRoutes = Array.from(routeNames).sort();
-
-        const selectElement = document.getElementById('route-select');
-        sortedRoutes.forEach(name => {
-            const option = document.createElement('option');
-            option.value = name;
-            option.textContent = name;
-            selectElement.appendChild(option);
-        });
-    }
-
-    function handleRouteSelection(event) {
-        const name = event.target.value;
-        clearMapHighlights();
-
-        if (name) {
-            const selectedFeatures = routesJSON.features.filter(f => f.attributes.Name === name);
-            const bounds = L.latLngBounds([]);
-
-            selectedFeatures.forEach(feature => {
-                const path = feature.geometry.paths[0].map(point => {
-                    const latLng = utmToLatLng(point[0], point[1]);
-                    bounds.extend(latLng);
-                    return latLng;
-                });
-
-                const polyline = L.polyline(path, {
-                    color: '#FFD700',
-                    weight: 6,
-                    opacity: 1.0
-                });
-                routeLayers.addLayer(polyline);
-                allRoutes.push(polyline);
-            });
-
-            // Draw bus stops for the selected route
-            busStopsJSON.Sheet1.forEach(stop => {
-                const [stopX, stopY] = [parseFloat(stop.x), parseFloat(stop.y)];
-                const stopLatLng = utmToLatLng(stopX, stopY);
-
-                // Check if the stop is close to any point on the selected route
-                const isNearRoute = selectedFeatures.some(feature => {
-                    return feature.geometry.paths[0].some(point => {
-                        const routePoint = utmToLatLng(point[0], point[1]);
-                        const distance = getDistanceBetweenPoints(stopLatLng, routePoint);
-                        return distance < 500; // Within 500 meters of the route
-                    });
-                });
-
-                if (isNearRoute) {
-                    const marker = createBusStopMarker(stopLatLng, stop.stop_name);
-                    console.log(`Created marker for stop: ${stop.stop_name}`);
-
-                    // Create popup content for the bus stop
-                    const popupContent = `
-                        <div style="padding: 12px; min-width: 200px; font-family: 'Inter', sans-serif; color: #000000; background-color: #f9fafb; border-radius: 8px;">
-                            <h3 style="margin: 0 0 8px 0; color: #000000; font-size: 18px; font-weight: 700; border-bottom: 1px solid #e5e7eb; padding-bottom: 4px;">
-                                محطة ${stop.stop_name}
-                            </h3>
-                            <ul style="list-style: none; padding: 0; margin: 0; font-size: 14px; color: #000000;">
-                                ${Object.entries(stop).map(([key, value]) => {
-                                    if (key === 'stop_name') return '';
-                                    if (key === 'OBJECTID') return '';
-                                    if (key === 'x' || key === 'y') return '';
-                                    // display the neighborhood label in Arabic
-                                    if (key === 'neighborhood') {
-                                        return `<li><strong style="text-transform: capitalize;">الحي:</strong> ${value || 'غير محدد'}</li>`;
-                                    }
-                                    return `<li><strong style="text-transform: capitalize;">${key.replace(/_/g, ' ')}:</strong> ${value || 'غير محدد'}</li>`;
-                                }).join('')}
-                            </ul>
-                        </div>
-                    `;
-
-                    marker.bindPopup(popupContent);
-                    markerLayer.addLayer(marker);
-                    selectedMarkers.push(marker);
-                }
-            });
-
-            if (bounds.isValid()) {
-                map.fitBounds(bounds);
-            }
-        } else {
-            recenterMap();
-        }
-    }
-
-    function recenterMap() {
-        clearMapHighlights();
-        drawAllRoutes(); // Redraw all routes un-highlighted
-
-        // Reset the dropdown selection
-        document.getElementById('route-select').value = '';
-
+        const selectedFeatures = routesJSON.features.filter(f => f.attributes.Name === name);
         const bounds = L.latLngBounds([]);
-        routesJSON.features.forEach(feature => {
-            feature.geometry.paths[0].forEach(point => {
-                const latLng = utmToLatLng(point[0], point[1]);
-                bounds.extend(latLng);
+        let stopsCount = 0;
+
+        // Draw Selected Route (Bright)
+        selectedFeatures.forEach(feature => {
+            const path = feature.geometry.paths[0].map(p => {
+                const ll = utmToLatLng(p[0], p[1]);
+                bounds.extend(ll);
+                return ll;
             });
+            // Glow effect
+            L.polyline(path, { color: '#eab308', weight: 8, opacity: 0.3 }).addTo(routeLayers);
+            // Main line
+            L.polyline(path, { color: '#fbbf24', weight: 4, opacity: 1 }).addTo(routeLayers);
         });
-        // Don't show any bus stops when no route is selected
-        if (bounds.isValid()) {
-            map.fitBounds(bounds);
-        }
+
+        // Find and Draw Stops
+        busStopsJSON.Sheet1.forEach(stop => {
+            const stopLatLng = utmToLatLng(parseFloat(stop.x), parseFloat(stop.y));
+
+            // Check proximity
+            const isNear = selectedFeatures.some(f =>
+                f.geometry.paths[0].some(p => getDistance(stopLatLng, utmToLatLng(p[0], p[1])) < 600)
+            );
+
+            if (isNear) {
+                stopsCount++;
+                const icon = L.divIcon({
+                    className: '',
+                    html: `<div class="w-4 h-4 bg-red-600 rounded-full border-2 border-white shadow-md"></div>`,
+                    iconSize: [16, 16],
+                    iconAnchor: [8, 8]
+                });
+
+                const marker = L.marker(stopLatLng, { icon: icon }).addTo(markerLayer);
+
+                const popupContent = `
+                    <div class="font-sans text-right">
+                        <h3 class="font-bold text-lg text-yellow-500 border-b border-slate-600 pb-1 mb-2">محطة ${stop.stop_name}</h3>
+                        ${stop.neighborhood ? `<p class="text-sm text-slate-300"><strong class="text-slate-400">الحي:</strong> ${stop.neighborhood}</p>` : ''}
+                        <p class="text-xs text-slate-500 mt-2">انقر لرؤية الاتجاهات</p>
+                    </div>
+                `;
+                marker.bindPopup(popupContent);
+            }
+        });
+
+        if (bounds.isValid()) map.fitBounds(bounds, { padding: [50, 50] });
+
+        // Update Stats Panel
+        const statsPanel = document.getElementById('route-stats');
+        statsPanel.classList.remove('hidden');
+        document.getElementById('stat-name').innerText = name;
+        document.getElementById('stat-stops').innerText = stopsCount;
     }
 
-    // Initialize the map when the page loads
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('DOM loaded, initializing map...');
-        initMap();
+    function resetMap() {
+        document.querySelectorAll('.route-item').forEach(el => el.classList.remove('active'));
+        document.getElementById('route-stats').classList.add('hidden');
+        routeLayers.clearLayers();
+        markerLayer.clearLayers();
+        drawAllRoutes();
+
+        // Fit bounds to all routes
+        const bounds = L.latLngBounds([]);
+        routesJSON.features.forEach(f => f.geometry.paths[0].forEach(p => bounds.extend(utmToLatLng(p[0], p[1]))));
+        if (bounds.isValid()) map.fitBounds(bounds);
+    }
+
+    function locateUser() {
+        if (!navigator.geolocation) {
+            alert("المتصفح لا يدعم تحديد الموقع");
+            return;
+        }
+
+        const btn = document.getElementById('locate-btn');
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+
+                if (userLocationMarker) map.removeLayer(userLocationMarker);
+
+                const userIcon = L.divIcon({
+                    html: '<div class="w-4 h-4 bg-blue-500 rounded-full border-2 border-white shadow-[0_0_15px_rgba(59,130,246,0.8)] pulse-ring"></div>',
+                    className: 'relative',
+                    iconSize: [20, 20]
+                });
+
+                userLocationMarker = L.marker([lat, lng], {icon: userIcon}).addTo(map)
+                    .bindPopup("موقعك الحالي").openPopup();
+
+                map.setView([lat, lng], 15);
+                btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+            },
+            () => {
+                alert("تعذر تحديد الموقع");
+                btn.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+            }
+        );
+    }
+
+    function showError(title, msg) {
+        document.getElementById('map-container').innerHTML = `
+            <div class="h-full flex items-center justify-center text-center p-8">
+                <div>
+                    <i class="fa-solid fa-triangle-exclamation text-4xl text-red-500 mb-4"></i>
+                    <h3 class="text-xl font-bold text-white mb-2">${title}</h3>
+                    <p class="text-slate-400">${msg}</p>
+                </div>
+            </div>
+        `;
+        document.getElementById('loading-indicator').style.display = 'none';
+    }
+
+    // --- Event Listeners ---
+
+    document.addEventListener('DOMContentLoaded', initMap);
+
+    // Search Filter
+    document.getElementById('route-search').addEventListener('input', (e) => {
+        renderRouteList(e.target.value);
     });
 
-    // Fallback timeout in case something goes wrong
-    setTimeout(function() {
-        const loadingIndicator = document.getElementById('loading-indicator');
-        if (loadingIndicator && loadingIndicator.style.display !== 'none') {
-            console.log('Emergency timeout - hiding loading indicator');
-            loadingIndicator.style.display = 'none';
-            if (!map) {
-                showError('انتهت مهلة التحميل', 'استغرق تحميل الخريطة وقتاً أطول من المتوقع');
-            }
-        }
-    }, 10000); // 10 second timeout
+    // Sidebar Toggles
+    const sidebar = document.getElementById('sidebar');
+    document.getElementById('open-sidebar').onclick = () => sidebar.classList.remove('translate-x-full');
+    document.getElementById('close-sidebar').onclick = () => sidebar.classList.add('translate-x-full');
+
+    // Map Buttons
+    document.getElementById('recenter-btn').onclick = resetMap;
+    document.getElementById('locate-btn').onclick = locateUser;
+
 </script>
 </body>
 </html>
